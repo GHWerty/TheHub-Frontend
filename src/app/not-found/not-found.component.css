@@ -1,0 +1,33 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+.full-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: url('../../assets/images/Background.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.column-wrapper{
+    width: 30vw;
+}
+
+.neon-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    position: relative;
+}
+
+.neon-text h1{
+    font-style: italic;
+    font-size: 50px;
+}

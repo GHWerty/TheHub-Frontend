@@ -1,0 +1,22 @@
+.subtitle {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.profile-message {
+    margin-top: 100px;
+    width: 350px;
+    padding: 20px;
+    font-size: 18px;
+    background-color: rgba(34, 34, 34, 1);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+.user-profile-image {
+    width: calc(100% - 120px);
+}
+
+.my-profile {
+    width: calc(100% - 240px);
+}

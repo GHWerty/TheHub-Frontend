@@ -1,0 +1,72 @@
+<div class="backdrop" *ngIf="showForm">
+  <div class="modal">
+    <div class="card-style column-wrapper">
+      <div class="image-container">
+        <img src="../../assets/images/Background.png" alt="HomePostLogo">
+        <div class="neon-text">
+          <h1>THEHUB</h1>
+        </div>
+      </div>
+      <form class="column-wrapper" #form="ngForm">
+        <div>
+          <label for="titleContent" class="title">Título del foro</label>
+          <input type="text" id="titleContent" [(ngModel)]="title" name="titleContent" placeholder="Título"
+            class="search" required maxlength="50" #titleContent="ngModel" />
+          <div *ngIf="titleContent.dirty || titleContent.touched" class="error-message">
+            <div *ngIf="titleContent.invalid && titleContent.errors?.['required']">
+              ¡El formulario merece un título!
+            </div>
+            <div *ngIf="titleContent.value?.length == 50">
+              El título puede tener un máximo de 50 caracteres
+            </div>
+          </div>
+        </div>
+        <div>
+          <label for="statusContent" class="title">Estado</label>
+          <input id="statusContent" type="text" [(ngModel)]="status" name="statusContent" placeholder="Estado"
+            class="search" required maxlength="50" #statusContent="ngModel" />
+          <div *ngIf="statusContent.dirty || statusContent.touched" class="error-message">
+            <div *ngIf="statusContent.invalid && statusContent.errors?.['required']">
+              ¡El formulario merece un estado!
+            </div>
+            <div *ngIf="statusContent.value?.length == 50">
+              El estado puede tener un máximo de 50 caracteres
+            </div>
+          </div>
+        </div>
+        <div>
+          <label for="descriptionContent" class="title">Descripción:</label>
+          <textarea id="descriptionContent" [(ngModel)]="description" name="descriptionContent"
+            placeholder="Descripción" class="search" required maxlength="250" #descriptionContent="ngModel"
+            style=" height: 90px;"></textarea>
+          <div *ngIf="descriptionContent.dirty || descriptionContent.touched" class="error-message">
+            <div *ngIf="descriptionContent.invalid && descriptionContent.errors?.['required']">
+              ¡El formulario merece una descripción!
+            </div>
+            <div *ngIf="descriptionContent.value?.length == 250">
+              La descripción puede tener un máximo de 250 caracteres
+            </div>
+          </div>
+        </div>
+        <div>
+          <label for="rulesContent" class="title">Normas:</label>
+          <textarea id="rulesContent" [(ngModel)]="rules" name="rulesContent" placeholder="Normas" class="search"
+            required maxlength="500" #rulesContent="ngModel" style="height: 160px;"></textarea>
+          <div *ngIf="rulesContent.dirty || rulesContent.touched" class="error-message">
+            <div *ngIf="rulesContent.invalid && rulesContent.errors?.['required']">
+              ¡El formulario merece una descripción!
+            </div>
+            <div *ngIf="rulesContent.value?.length == 500">
+              Las sección de normas puede tener un máximo de 500 caracteres
+            </div>
+          </div>
+        </div>
+        <div class="footer" style="cursor: pointer;">
+          <span style="margin-right: 20px;" (click)="closeForm()">Cancelar</span>
+          <button type="submit" [disabled]="!form.valid"
+            (click)=" forum == undefined ? createForum() : updateForum()">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,63 @@
+.loged-section {
+    width: 20vw;
+    min-width: 300px;
+}
+
+i {
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.icon-container {
+    margin-left: 10px;
+    min-width: 40px;
+}
+
+.option-filter {
+    font-size: 14px;
+}
+
+i.option-filter {
+    color: rgb(202, 195, 195);
+    width: 30px;
+    text-align: center;
+}
+
+.option-search {
+    margin-top: 10px;
+    background-color: rgba(43, 41, 41, 0.7);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+}
+
+.bx.title {
+    font-size: 15px;
+    margin-right: 5px;
+}
+
+i.icon {
+    color: white;
+}
+
+.title-container {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.title {
+    cursor: pointer;
+}
+
+.icon-image {
+    width: calc(100% - 120px);
+}
+
+.create-forum {
+    margin-top: 10px;
+    display: flex;
+    justify-content: right;
+    color: rgb(202, 195, 195);
+}
+
+.logo {
+    width: calc(100% - 120px);
+}

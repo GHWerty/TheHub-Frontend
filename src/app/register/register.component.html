@@ -1,0 +1,78 @@
+<div class="miLogin">
+    <div class="wrapper">
+        <form #form="ngForm">
+            <div class="image-container">
+                <div class="neon-text">
+                    <h1>THEHUB</h1>
+                </div>
+            </div>
+            <div class="input-box">
+                <input type="text" placeholder="Nick" name="nickContent" [(ngModel)]="nick" required
+                    #nickContent="ngModel">
+                <div *ngIf="nickContent.invalid && (nickContent.dirty || nickContent.touched)" class="errorMessage">
+                    <div *ngIf="nickContent.errors?.['required']">
+                        Nick requerido.
+                    </div>
+                </div>
+                <div *ngIf="!(nickContent.dirty || nickContent.touched) && !nickContent.touched && nickErrorMessage != ''"
+                    class="errorMessage">
+                    {{nickErrorMessage}}
+                </div>
+                <i class='bx bxs-user'></i>
+            </div>
+            <div class="input-box">
+                <input type="email" placeholder="Correo" name="emailContent" [(ngModel)]="email" required email
+                    #emailContent="ngModel">
+                <div *ngIf="emailContent.invalid && (emailContent.dirty || emailContent.touched)" class="errorMessage">
+                    <div *ngIf="emailContent.errors?.['required']">
+                        Correo requerido.
+                    </div>
+                    <div *ngIf="emailContent.errors?.['email']">
+                        Formato de correo no válido.
+                    </div>
+                </div>
+                <div *ngIf="!(emailContent.dirty || emailContent.touched) && emailErrorMessage != ''"
+                    class="errorMessage">
+                    {{emailErrorMessage}}
+                </div>
+                <i class='bx bx-envelope'></i>
+            </div>
+            <div class="input-box">
+                <input type="password" placeholder="Contraseña" name="passwordContent" [(ngModel)]="password" required
+                    minlength="8" #passwordContent="ngModel">
+                <div *ngIf="passwordContent.invalid && (passwordContent.dirty || passwordContent.touched)"
+                    class="errorMessage">
+                    <div *ngIf="passwordContent.errors?.['required']">
+                        Contraseña requerida.
+                    </div>
+                    <div *ngIf="passwordContent.errors?.['minlength']">
+                        La contraseña debe tener al menos 8 caracteres.
+                    </div>
+                </div>
+                <i class='bx bxs-lock-alt'></i>
+            </div>
+            <div class="input-box">
+                <input type="password" placeholder="Confirmar contraseña" name="passwordvalidationContent"
+                    [(ngModel)]="passwordvalidation" required minlength="8" #passwordvalidationContent="ngModel">
+                <div *ngIf="passwordvalidationContent.invalid && (passwordvalidationContent.dirty || passwordvalidationContent.touched)"
+                    class="errorMessage">
+                    <div *ngIf="passwordvalidationContent.errors?.['required']">
+                        Contraseña requerida.
+                    </div>
+                    <div *ngIf="passwordvalidationContent.errors?.['minlength']">
+                        La contraseña debe tener al menos 8 caracteres.
+                    </div>
+                </div>
+                <div *ngIf="(passwordvalidationContent.valid && (passwordvalidation != password))" class="errorMessage">
+                    Las contraseñas deben coincidir
+                </div>
+                <i class='bx bxs-lock-alt'></i>
+            </div>
+            <button type="submit" class="btn" (click)="registrarUsuario()"
+                [disabled]="!form.valid || password !== passwordvalidation">Registrarse</button>
+            <div class="register-link">
+                <p>¿Ya tienes una cuenta?&nbsp;&nbsp;<a routerLink="/login">Iniciar sesión</a></p>
+            </div>
+        </form>
+    </div>
+</div>

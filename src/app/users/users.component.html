@@ -1,0 +1,69 @@
+<div class="column-wrapper section user-section" *ngIf="forum">
+    <div *ngIf="forum.admin || forum.creatorId == loggedUserId; else normalUser" class="row-wrapper"
+        style="width: 100%;">
+        <div class="image-container logo">
+            <img src="../../assets/images/Background.png" alt="HomePostLogo">
+            <div class="neon-text">
+                <h1>USUARIOS</h1>
+            </div>
+        </div>
+        <div class="box-icon">
+            <i class='bx bxs-virus-block' [ngStyle]="{ 'color': bannedList ? '#e5e3e7e5' : 'white'}"
+                (click)="showBanedList()"></i>
+        </div>
+    </div>
+    <ng-template #normalUser>
+        <div class="image-container" style="width: 100%;">
+            <img src="../../assets/images/Background.png" alt="HomePostLogo">
+            <div class="neon-text">
+                <h1>USUARIOS</h1>
+            </div>
+        </div>
+    </ng-template>
+    <div class="card-style content-filter">
+        <div class="row-wrapper search-container">
+            <i class='bx bx-search-alt-2 icon'></i>
+            <input #searchUser type="text" placeholder="Buscar" class="search" (input)="onTextInput()">
+        </div>
+    </div>
+    <div class="scroll-section column-wrapper" (scroll)="onScroll($event)">
+        <div class="card-style row-wrapper" *ngFor="let user of users, let i = index">
+            <div>
+                <div [ngStyle]="{
+                    'color': bannedList ? '#d23434': 
+                    forum.creator == user.nick ? '#FEBD3B' : 
+                    user.admin ? '#B86BDA' : 
+                    user.followed ? '#FF69B4' : 'white' }" style="display: flex; align-items: center;">
+                    <i class='bx bx-x title x-icon'
+                        *ngIf=" !bannedList && forum.creator != user.nick && loggedUserId != user.id && (forum.creatorId == loggedUserId || (forum.admin && !user.admin))"
+                        (click)="banUser(user.id)"></i>
+                    <i class='bx bx-chevrons-up title x-icon'
+                        [ngStyle]="{'transform': user.admin ? 'rotate(180deg)' : 'rotate(0deg)'}"
+                        *ngIf="!bannedList && loggedUserId == forum.creatorId && user.id != loggedUserId"
+                        (click)="grantAdmin(i, user.id, !user.admin)" style="margin-right: 5px;"></i>
+                    <span class="title" (click)="goUserPage(user.id)" style="cursor: pointer">{{user.nick}}</span>
+                </div>
+                <div class="text-content">{{user.status}}</div>
+            </div>
+            <div class="follow-icon-column" *ngIf="loggedUserId != user.id">
+                <ng-container *ngIf="bannedList; else followIcons">
+                    <i class='bx bxs-lock-open-alt' style="color: #d23434" (click)="unbanUser(user.id, i)"></i>
+                </ng-container>
+                <ng-template #followIcons>
+                    <div [ngStyle]="{
+                      'color': forum.creator == user.nick ? '#FEBD3B' : 
+                      user.admin ? '#B86BDA' : 
+                      user.followed ? '#FF69B4' : 'white' }">
+                        <ng-container *ngIf="user.followed; else unfollowedIcon">
+                            <i class='bx bx-code-alt' (click)="unfollowUser(i, user.id)"></i>
+                        </ng-container>
+                        <ng-template #unfollowedIcon>
+                            <i class='bx bx-expand-horizontal' (click)="followUser(i, user.id)"></i>
+                        </ng-template>
+                    </div>
+                </ng-template>
+
+            </div>
+
+        </div>
+    </div>

@@ -1,0 +1,61 @@
+<div class="backdrop" *ngIf="showForm">
+  <div class="modal">
+    <div class="card-style column-wrapper" (click)="$event.stopPropagation()">
+      <div class="image-container">
+        <img src="../../assets/images/Background.png" alt="HomePostLogo">
+        <div class="neon-text">
+          <h1>THEHUB</h1>
+        </div>
+      </div>
+      <form class="column-wrapper" #form="ngForm">
+        <div>
+          <label for="nickContent" class="title">Nick</label>
+          <input type="text" id="nickContent" [(ngModel)]="nick" name="nickContent" placeholder="Nick" class="search"
+            required maxlength="20" #nickContent="ngModel" />
+          <div *ngIf="nickContent.dirty || nickContent.touched" class="error-message">
+            <div *ngIf="nickContent.invalid && nickContent.errors?.['required']">
+              ¡El formulario merece un nick!
+            </div>
+            <div *ngIf="nickContent.value?.length == 20">
+              El nick puede tener un máximo de 20 caracteres
+            </div>
+          </div>
+          <div *ngIf="nickErrorMesagge && !nickContent.dirty" class="error-message">
+            {{nickErrorMesagge}}
+          </div>
+        </div>
+        <div>
+          <label for="statusContent" class="title">Estado</label>
+          <input id="statusContent" type="text" [(ngModel)]="status" name="statusContent" placeholder="Estado"
+            class="search" maxlength="50" #statusContent="ngModel" />
+          <div *ngIf="statusContent.dirty || statusContent.touched" class="error-message">
+            <div *ngIf="statusContent.invalid && statusContent.errors?.['required']">
+              ¡El formulario merece un estado!
+            </div>
+            <div *ngIf="statusContent.value?.length == 50">
+              El estado puede tener un máximo de 50 caracteres
+            </div>
+          </div>
+        </div>
+        <div>
+          <label for="biographyContent" class="title">Descripción:</label>
+          <textarea id="biographyContent" [(ngModel)]="biography" name="biographyContent"
+            placeholder="Biografía" class="search" maxlength="250" #biographyContent="ngModel"
+            style=" height: 90px;"></textarea>
+          <div *ngIf="biographyContent.dirty || biographyContent.touched" class="error-message">
+            <div *ngIf="biographyContent.invalid && biographyContent.errors?.['required']">
+              ¡El formulario merece una descripción!
+            </div>
+            <div *ngIf="biographyContent.value?.length == 250">
+              La descripción puede tener un máximo de 250 caracteres
+            </div>
+          </div>
+        </div>
+        <div class="footer" style="cursor: pointer;">
+          <span style="margin-right: 20px;" (click)="closeForm()">Cancelar</span>
+          <button type="submit" [disabled]="!form.valid" (click)="updateUser()">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,78 @@
+<div class="background">
+  <div class="content-container">
+    <div class="section column-wrapper loged-section">
+      <div class="row-wrapper">
+        <div class="box-icon" style="padding-right: 5px;">
+          <i class='bx bx-log-out' (click)="logOut()"></i>
+        </div>
+        <div class="box-icon">
+          <i class='bx bxs-user icon' (click)="showUserPage()"></i>
+        </div>
+        <div class="image-container logo">
+          <img src="../../assets/images/Background.png" alt="HomePostLogo">
+          <div class="neon-text">
+            <h1>THEHUB</h1>
+          </div>
+        </div>
+      </div>
+      <div *ngFor="let option of userOptions; let i = index">
+        <div class="card-style option-filter" [ngStyle]="{'height': selectedOptionIndex != i ? '44px' : 'auto'}">
+          <div (click)="selectOption(i)" style="cursor: pointer;"
+            [ngStyle]="{'color': selectedOptionIndex == i ? '#e5e3e7e5' : 'white'}">
+            <i class='bx bxs-down-arrow' style="font-size: 10px;"
+              [ngStyle]="{ 'transform': selectedOptionIndex == i ? 'rotate(180deg)' : 'none' }"></i>
+            {{option.name}}
+          </div>
+          <div class="row-wrapper option-search" *ngIf="selectedOptionIndex == i">
+            <i class='bx bx-search-alt-2 option-filter' style="margin-top: 5px; cursor: default;"></i>
+            <input #searchInput type="text" placeholder="Buscar" class="search"
+            (input)="onTextInput($event)">
+          </div>
+          <div *ngIf="selectedOptionIndex == i && i == 2" class="create-forum" (click)="createForum()">
+            <i class='bx bx-list-plus create'></i>
+            <span style="cursor: pointer;">Crear foro</span>
+          </div>
+        </div>
+        <div class="scroll-section column-wrapper"[ngStyle]="{'max-height': 'calc(100vh - 154px - ' + ((userOptions.length-1) * 54 + (selectedOptionIndex === 2 ? 31 : 0)) + 'px)'}"
+        *ngIf="selectedOptionIndex == i" (scroll)="onScroll($event)">
+          <div class="card-style row-wrapper"
+            [ngStyle]="{'background-color': 'rgba(34, 34, 34, 0.8)', 'margin-top': i === 0 ? '10px' : '0'}"
+            *ngFor="let item of content; let i = index">
+            <div>
+              <div class="title-container title" [ngStyle]="{
+                'color': option.content == 'forums' && item.creatorId == loggedUserId ? 
+                '#FEBD3B' : option.content == 'forums' && item.banned ?
+                '#d23434' : option.content == 'forums' && item.admin ? 
+                '#B86BDA' : item.followed ?
+                '#FF69B4' : 'white' }">
+                <div *ngIf="option.content == 'forums'" class="break-word"><i
+                    class='bx bxs-trash title' (click)="deleteForum(i, item.id)"
+                    *ngIf="item.creatorId == loggedUserId"></i><span (click)="goForumPage(item.id)">{{item.title}}</span></div>
+                <div *ngIf="option.content == 'users'" (click)="goUserPage(item.id)">{{item.nick}}</div>
+              </div>
+              <div class="text-content">{{item.status}}</div>
+            </div>
+            <div class="follow-icon-column" [ngStyle]="{
+              'color': option.content == 'forums' && item.creatorId == loggedUserId ? 
+              '#FEBD3B' : option.content == 'forums' && item.banned ?
+              '#d23434' : option.content == 'forums' && item.admin ? 
+              '#B86BDA' : item.followed ? 
+              '#FF69B4' : 'white'
+            }" *ngIf="option.content == 'forums' && item?.creatorId != loggedUserId || option.content == 'users'">
+              <ng-container *ngIf="item.followed; else unfollowedIcon">
+                <i class='bx bx-code-alt'
+                  (click)="option.content == 'forums' ? unfollowForum(i, item.id) : unfollowUser(i, item.id)"></i>
+              </ng-container>
+              <ng-template #unfollowedIcon>
+                <i class='bx bx-expand-horizontal'
+                  (click)="option.content == 'forums' ? followForum(i, item.id) : followUser(i, item.id)"></i>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+      <app-forum-form-modal #forumForm (forumEmitter)="actualizarForos($event)"></app-forum-form-modal>
+    </div>
+    <router-outlet></router-outlet>
+  </div>
+</div>

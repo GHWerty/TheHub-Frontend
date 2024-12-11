@@ -1,0 +1,48 @@
+<div class="miLogin">
+    <div class="wrapper">
+        <form #form="ngForm">
+            <div class="image-container">
+                <div class="neon-text">
+                    <h1>THEHUB</h1>
+                </div>
+            </div>
+            <div class="input-box">
+                <input type="text" placeholder="Correo" name="emailContent" required email [(ngModel)]="email"
+                    #emailContent="ngModel">
+                <div *ngIf="emailContent.invalid && (emailContent.dirty || emailContent.touched)" class="error-message">
+                    <div *ngIf="emailContent.errors?.['required']">
+                        Correo requerido
+                    </div>
+                    <div *ngIf="emailContent.errors?.['email']">
+                        Formato de correo no válido
+                    </div>
+                </div>
+                <div *ngIf="!(emailContent.dirty || emailContent.touched) && emailErrorMessage != ''" class="error-message">
+                    {{emailErrorMessage}}
+                </div>
+                <i class='bx bxs-user inp'></i>
+            </div>
+            <div class="input-box">
+                <input type="password" placeholder="Contraseña" name="passwordContent" [(ngModel)]="password" required
+                    minlength="8" #passwordContent="ngModel">
+                <div *ngIf="passwordContent.invalid && (passwordContent.dirty || passwordContent.touched)" class="error-message">
+                    <div *ngIf="passwordContent.errors?.['required']">
+                        Contraseña requerida.
+                    </div>
+                    <div *ngIf="passwordContent.errors?.['minlength']">
+                        La contraseña debe tener al menos 8 caracteres.
+                    </div>
+                </div>
+                <div *ngIf="!(passwordContent.dirty || passwordContent.touched) && passwordErrorMessage != ''" class="error-message">
+                    {{passwordErrorMessage}}
+                </div>
+                <i class='bx bxs-lock-alt'></i>
+            </div>
+            <button type="submit" class="btn" (click)="iniciarSesion()" [disabled]="!form.valid">Iniciar
+                sesión</button>
+            <div class="register-link">
+                <p>¿No tienes una cuenta?&nbsp;&nbsp;<a routerLink="/register">Regístrate</a></p>
+            </div>
+        </form>
+    </div>
+</div>

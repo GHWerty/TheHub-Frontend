@@ -1,0 +1,146 @@
+<div class="content-container" *ngIf="objectProfiled">
+    <div class="column-wrapper section post-section">
+        <div class="row-wrapper">
+            <div class="box-icon">
+                <i class='bx bxs-left-arrow-alt' style="font-size: 28px;" (click)="back()"></i>
+            </div>
+            <div class="box-icon">
+                <i class='bx bxs-home-alt-2' (click)="goHome()"></i>
+            </div>
+            <div class="image-container"
+                [ngClass]="content == 'forum' ? 'icon-image' : ( content == 'user' && objectProfiled.id != loggedUserId) ? 'user-profile-image' : 'my-profile'">
+                <img src="../../assets/images/Background.png" alt="HomePostLogo">
+                <div class="neon-text">
+                    <h1>POSTS</h1>
+                </div>
+            </div>
+            <div class="box-icon" *ngIf="content == 'forum'">
+                <i class='bx bxs-user user' style="font-size: 18px;"
+                    [ngStyle]="{ 'color': showUsers ? '#e5e3e7e5' : 'white' }" (click)="toggleUsers()"></i>
+            </div>
+            <div class="box-icon" *ngIf="content == 'user' && objectProfiled.id == loggedUserId">
+                <i class='bx bxs-cog icon' (click)="updateCredentials()"></i>
+            </div>
+            <div class="box-icon" *ngIf="content == 'user' && objectProfiled.id == loggedUserId">
+                <i class='bx bxs-bookmark icon' (click)="goSavedsPage()"></i>
+            </div>
+        </div>
+        <div class="scroll-section column-wrapper" (scroll)="onScroll($event)">
+            <div class="card-style">
+                <div class="row-wrapper title" [ngStyle]="{ 
+                    'color': content == 'forum' && objectProfiled.creatorId == loggedUserId ? 
+                    '#FEBD3B' : content == 'user' && objectProfiled.id == loggedUserId ? 
+                    '#FEBD3B' : content == 'forum' && objectProfiled.banned ?
+                    '#d23434' : content == 'forum' && objectProfiled.admin ? 
+                    '#B86BDA' : objectProfiled.followed ? '#FF69B4' : 'white'
+              }">
+                    <div class="title-container">
+                        <i *ngIf="(content == 'forum' && objectProfiled.creatorId == loggedUserId) || (content == 'user' && objectProfiled.id == loggedUserId)"
+                            class='bx bxs-pencil' (click)="openForumForm()"></i>
+                        <span>{{content == 'forum' ? objectProfiled.title : objectProfiled.nick}}</span>
+                    </div>
+                    <div class="follow-icon-column">
+                        <i class='bx bx-message-dots' *ngIf="content == 'forum' && !objectProfiled.banned"
+                            (click)="publicateForm()"></i>
+                        <i class='bx bxs-lock-alt' style="cursor: default;" *ngIf="content == 'forum' && objectProfiled.banned"></i>
+                        <div *ngIf="(content == 'forum' && objectProfiled.creatorId != loggedUserId) || (content == 'user' && objectProfiled.id != loggedUserId)"
+                            style="margin-left: 10px;">
+                            <ng-container *ngIf="objectProfiled.followed; else unfollowedIcon">
+                                <i class='bx bx-code-alt'
+                                    (click)="content == 'forum' ? unfollowForum(objectProfiled.id) : unfollowUser(objectProfiled.id)"></i>
+                            </ng-container>
+                            <ng-template #unfollowedIcon>
+                                <i class='bx bx-expand-horizontal'
+                                    (click)="content == 'forum' ? followForum(objectProfiled.id) : followUser(objectProfiled.id)"></i>
+                            </ng-template>
+                        </div>
+                        <i style="margin-left: 10px; margin-bottom: 4px;" [ngClass]="showInfo ? 'bx bx-caret-up' : 'bx bx-caret-down'" [ngStyle]="{ 'margin-top': showInfo == true ? '5px' : '0px' }"
+                            *ngIf="content=='forum' || (content == 'user' && (objectProfiled.status  || objectProfiled.biography))"
+                            (click)="toggleInfo()"></i>
+                    </div>
+                </div>
+                <div *ngIf="showInfo && objectProfiled.status">
+                    <div class="subtitle" style="margin-top: 10px;">Estado: </div>
+                    <span class="text-content">{{objectProfiled.status}}</span>
+                </div>
+                <div *ngIf="showInfo && content == 'forum'" class="column-wrapper" style="margin-top: 10px;">
+                    <div>
+                        <div class="subtitle">Descripción: </div>
+                        <span class="post-content">{{objectProfiled.description}}</span>
+                    </div>
+                    <div>
+                        <div class="subtitle">Normas: </div>
+                        <span class="post-content">{{objectProfiled.rules}}</span>
+                    </div>
+                    <div class="footer">Creado y gestionado por {{objectProfiled.creator}} desde
+                        {{objectProfiled.creationDate | date:'dd/MM/yyyy'}}</div>
+                </div>
+                <div *ngIf="showInfo && content == 'user' && objectProfiled.biography">
+                    <div class="subtitle" style="margin-top: 10px;">Biografía: </div>
+                    <span class="text-content">{{objectProfiled.biography}}</span>
+                </div>
+            </div>
+            <div *ngIf="showTux && posts.length == 0" class="tux-container">
+                <img src="../../assets/images/EmptyForum.PNG" alt="EmptyForumTux" class="tux"
+                    *ngIf="content == 'forum'">
+                <img src="../../assets/images/EmptyUser.PNG" alt="EmptyForumTux" class="tux"
+                    *ngIf="content == 'user' && objectProfiled.id != loggedUserId">
+                <img src="../../assets/images/EmptyLoggedUserPage.PNG" alt="EmptyForumTux" class="tux"
+                    *ngIf="content == 'user' && objectProfiled.id == loggedUserId">
+            </div>
+            <div *ngFor="let post of posts; let i = index" class="card-style post-column-wrapper">
+                <div class="post-header">
+                    <div style="display: flex; align-items: center;">
+                        <span style="cursor: pointer; margin-right: 5px;" *ngIf="post.repliedPostId != null"
+                            (click)="goThread(post.repliedPostId)">
+                            <i class='bx bx-reply'></i>
+                            Ir al hilo
+                        </span>
+                        <span (click)="content != 'forum' ? goForumPage(post.forumId) : null"
+                            [ngStyle]="{ 'cursor': content != 'forum' ? 'pointer' : 'text' }">#{{post.forumName}}</span>
+                        <span (click)="content != 'user' ? goUserPage(post.authorId) : null"
+                            [ngStyle]="{ 'cursor': content != 'user' ? 'pointer' : 'text' }"
+                            style="margin-left: 5px;">&#64;{{post.author}}</span>
+                            <i *ngIf="post.hasPermissons && post.authorId != loggedUserId" class='bx bx-x title x-icon' (click)="banUser(post.forumId, post.authorId)"></i>
+                    </div>
+                    <span>{{post.elapsedTime}}</span>
+                </div>
+                <div class="post-title">
+                    <i *ngIf="post.hasPermissons || post.authorId == loggedUserId" class='bx bxs-trash post-title'
+                        (click)="deletePost(i, post.postId)"></i>
+                    <i *ngIf="post.authorId == loggedUserId" class='bx bxs-pencil' (click)="editForm(post)"></i>
+                    <span>{{post.title}}</span>
+                </div>
+                <span class="post-content">{{post.text}}</span>
+                <div class="post-interactions">
+                    <div>
+                        <ng-container *ngIf="!post.banned; else banned">
+                            <i class='bx bx-reply' (click)="replyForm(post)">Responder</i>
+                        </ng-container>
+                        <ng-template #banned>
+                            <i class='bx bx-block' style="cursor: default;">Responder</i>
+                        </ng-template>
+                        <i *ngIf="post.replied" style="margin-left: 10px;" class="bx bx-redo"
+                            (click)="goThread(post.postId)">Ver respuestas</i>
+                    </div>
+                    <div>
+                        <span>{{post.likes}}<i class='bx bxs-heart'
+                                [ngStyle]="{'color': post.liked ? '#CF5A5A' : '#e5e3e7e5'}"
+                                (click)="likesInteraction(i, post.postId)"></i></span>
+                        <span style="margin-left: 10px;">{{post.saveds}}<i class='bx bxs-bookmark'
+                                [ngStyle]="{'color': post.saved ? '#BF7DAA' : '#e5e3e7e5'}"
+                                (click)="savesInteraction(i, post.postId)"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <app-users *ngIf="content == 'forum' && showUsers" [forum]="objectProfiled"></app-users>
+</div>
+<app-forum-form-modal #profileForm *ngIf="objectProfiled && content == 'forum'" [forum]="objectProfiled"
+    (forumEmitter)="updateForum($event)"></app-forum-form-modal>
+<app-user-form-modal #profileForm *ngIf="objectProfiled && content == 'user'" [user]="objectProfiled"
+    (userEmitter)="updateUser($event)"></app-user-form-modal>
+<app-post-form-modal #postForm (postEmitter)="updatePost($event)"></app-post-form-modal>
+<app-credentials-form-modal #credentialsForm
+    *ngIf="content == 'user' && objectProfiled && objectProfiled.id == loggedUserId"></app-credentials-form-modal>

@@ -1,0 +1,82 @@
+<div class="backdrop" *ngIf="showForm">
+    <div class="modal">
+        <div class="card-style column-wrapper form-section" (click)="$event.stopPropagation()">
+            <div class="image-container form-image">
+                <img src="../../assets/images/Background.png" alt="HomePostLogo">
+                <div class="neon-text">
+                    <h1>THEHUB</h1>
+                </div>
+            </div>
+            <div class="reply-style post-column-wrapper" *ngIf="repliedPost != null">
+                <div class="post-header">
+                    <div class="title-container">
+                        <span>#{{repliedPost!.forumName}}</span>
+                        <span style="margin-left: 5px;">&#64;{{repliedPost!.author}}</span>
+                    </div>
+                    <span>{{repliedPost!.elapsedTime}}</span>
+                </div>
+                <span class="post-title">{{repliedPost!.title}}</span>
+                <span class="post-content">{{repliedPost!.text}}</span>
+                <div class="post-interactions" style="margin-bottom: 0px;">
+                    <span>{{repliedPost!.likes}}<i class='bx bxs-heart'
+                            [ngStyle]="{'color': repliedPost!.liked ? '#CF5A5A' : '#e5e3e7e5'}"></i></span>
+                    <span style="margin-left: 10px;">{{repliedPost!.saveds}}<i class='bx bxs-bookmark'
+                            [ngStyle]="{'color': repliedPost!.saved ? '#BF7DAA' : '#e5e3e7e5'}"></i></span>
+                </div>
+            </div>
+            <form #form="ngForm">
+                <div class="column-wrapper">
+                    <div class="post-header" *ngIf="post != undefined">
+                        <div class="title-container">
+                            <span>{{post.forumName}}</span>
+                            <span style="margin-left: 5px;">&#64;{{post.author}}</span>
+                        </div>
+                        <span>{{post.elapsedTime}}</span>
+                    </div>
+                    <div class="title">
+                        <i class='bx bx-reply' *ngIf="repliedPost != null"></i>
+                        <label for="titleContent" *ngIf="post == null">Título del post</label>
+                        <input type="text" id="titleContent" [(ngModel)]="title" name="titleContent"
+                            placeholder="Título" class="search" required maxlength="60" #titleContent="ngModel" />
+                        <div *ngIf="titleContent.dirty || titleContent.touched" class="error-message"
+                            style="font-weight: normal;">
+                            <div *ngIf="titleContent.invalid && titleContent.errors?.['required']">
+                                ¡El formulario merece un título!
+                            </div>
+                            <div *ngIf="titleContent.value?.length == 60">
+                                El título puede tener un máximo de 50 caracteres
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="textContent" class="title" *ngIf="post == null">Contenido</label>
+                        <textarea id="textContent" [(ngModel)]="text" name="textContent"
+                            placeholder="Contenido del post" class="search content" required maxlength="500"
+                            #textContent="ngModel"></textarea>
+                        <div *ngIf="textContent.dirty || textContent.touched" class="error-message">
+                            <div *ngIf="textContent.invalid && textContent.errors?.['required']">
+                                ¡El post merece un contenido!
+                            </div>
+                            <div *ngIf="textContent.value?.length == 500">
+                                El contenido puede tener un máximo de 500 caracteres
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-interactions" *ngIf="post != undefined">
+                        <div>
+                            <span>{{post.likes}}<i class='bx bxs-heart'
+                                    [ngStyle]="{'color': post.liked ? '#CF5A5A' : '#e5e3e7e5'}"></i></span>
+                            <span style="margin-left: 10px;">{{post.saveds}}<i class='bx bxs-bookmark'
+                                    [ngStyle]="{'color': post.saved ? '#BF7DAA' : '#e5e3e7e5'}"></i></span>
+                        </div>
+                    </div>
+                    <div class="footer">
+                        <span style="margin-right: 20px; cursor: pointer;" (click)="closeForm()">Cancelar</span>
+                        <button type="submit" [disabled]="!form.valid"
+                            (click)="post != null ? updatePost() : (repliedPost != null ? createReply() : createPost())">Guardar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
